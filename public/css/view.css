@@ -1,0 +1,26 @@
+* {
+	/* Webkit border removal */
+	outline: none;
+}
+
+body {
+	font-size: 11px;
+	font-family: 'Roboto', sans-serif;
+	margin: 0;
+	width: 700px;
+}
+
+#help {
+	background: #1565C0;
+	padding: 0.5rem 1rem;
+	color: white;
+}
+
+#help p {
+	text-align: center;
+	font-size: 1rem;
+}
+
+#help ul {
+	padding: 0.5rem 2rem;
+}

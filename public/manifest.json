@@ -1,0 +1,49 @@
+{
+    "name": "Tab navigation helper",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "Tab navigation helper",
+    "author": "Anderial",
+    "browser_action": {
+        "default_popup": "index.html",
+        "default_icon": "images/tab-icon.png",
+        "default_title": "Tab navigation helper"
+    },
+    "permissions": [
+        "storage",
+        "activeTab",
+        "tabs",
+        "commands"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "js/vendor.js",
+                "js/content_script.js"
+            ]
+        }
+    ],
+    "background": {
+        "scripts": [
+            "js/model.js",
+            "js/context.js",
+            "js/core.js",
+            "js/onCreated.js",
+            "js/onRemoved.js",
+            "js/onActivated.js",
+            "js/onCommand.js"
+        ],
+        "persistent": false
+    },
+    "commands": {
+        "toggle_tab_event": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+X"
+            },
+            "description": "toggle_tab_event: Ctrl+Shift+X"
+        }
+    }
+}
