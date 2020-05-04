@@ -10,6 +10,7 @@ module.exports = {
         onActivated: path.join(__dirname, srcDir + 'events/onActivated.ts'),
         onCreated: path.join(__dirname, srcDir + 'events/onCreated.ts'),
         onRemoved: path.join(__dirname, srcDir + 'events/onRemoved.ts'),
+        onDetached: path.join(__dirname, srcDir + 'events/onDetached.ts'),
         onCommand: path.join(__dirname, srcDir + 'events/onCommand.ts'),
         index: path.join(__dirname, srcDir + 'index.ts')
     },

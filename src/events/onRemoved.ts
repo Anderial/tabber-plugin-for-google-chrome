@@ -14,7 +14,7 @@ chrome.tabs.onRemoved.addListener(function (tabId: number, removeInfo: chrome.ta
  * @param {WindowInfo} targetWindowInfo Information about browser window and tabs
  * @param {number} targetTabId Id target tab
  */
-function onRemovedFunction(targetWindowInfo: IWindowInfo, targetTabId: number): IWindowInfo {
+export function onRemovedFunction(targetWindowInfo: IWindowInfo, targetTabId: number): IWindowInfo {
     //  Search 'targetTabId' and remove in 'targetWindowInfo'
     for (var index = 0; index < targetWindowInfo.tabs.length; index++) {
         const tabInfo = targetWindowInfo.tabs[index];

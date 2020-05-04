@@ -31,6 +31,10 @@ export function ConvertTabInfo(chromeTabInfo: chrome.tabs.Tab) : ITabInfo {
     };
 }
 
+export function nameof<T>(key: keyof T, instance?: T): keyof T {
+    return key;
+}
+
 /** 
  * Display all field object -> "Attention! Here fucking alert(0_0)"
  * @param {*} otherObject Any object

@@ -13,9 +13,9 @@ window.onload = () => chrome.windows.getCurrent(function (getInfo) {
 /**
  *  Function draw tabs list 
  * @param {IWindowInfo} currentWindowInfo 
- * @param {ITabInfo} tabInfo
+ * @param {number} targetTabId Id target tab
  */
-function windowOnloadEvent(targetWindowInfo: IWindowInfo, tabId: number) {
+function windowOnloadEvent(targetWindowInfo: IWindowInfo, targetTabId: number) {
     //  Take parent element for the list items
     let parentHtmlElement = document.getElementById("selected_tabs_history");
     //  We clean it
