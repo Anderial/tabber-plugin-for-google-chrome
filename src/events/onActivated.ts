@@ -1,4 +1,4 @@
-import { MegaMegaMessage, ITabInfo, IWindowInfo } from './../model';
+import { ITabInfo, IWindowInfo } from './../model';
 import { EvetnHandlerWorcer } from './../core'
 
 //  >>>>>>>>>   Defining tab activation event

@@ -1,8 +1,5 @@
-import { ITabInfo, IWindowInfo, MegaMegaMessage, ConvertTabInfo } from './model'
+import { IWindowInfo, ConvertTabInfo } from './model'
 import { EvetnHandlerWorcer } from './core'
-
-//  Clean LocalStorage
-// window.onload = function CleanLocalStorage() { chrome.storage.local.clear(() => { alert("local storage is cleaned") }); }
 
 window.onload = () => chrome.windows.getCurrent(function (getInfo) {
     var currentWindowId = getInfo.id;
@@ -45,6 +42,4 @@ function windowOnloadEvent(targetWindowInfo: IWindowInfo, targetTabId: number) {
             parentHtmlElement.innerHTML += element;
         });
     }
-
-    return undefined;
 }

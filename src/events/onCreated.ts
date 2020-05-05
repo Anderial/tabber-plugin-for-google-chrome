@@ -1,4 +1,4 @@
-import { ITabInfo, IWindowInfo, MegaMegaMessage } from './../model'
+import { ITabInfo, IWindowInfo } from './../model'
 import { EvetnHandlerWorcer } from './../core'
 
 //  >>>>>>>>>   Defining onCreated event

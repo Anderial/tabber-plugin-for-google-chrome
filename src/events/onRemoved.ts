@@ -1,4 +1,4 @@
-import { ITabInfo, IWindowInfo, MegaMegaMessage } from './../model'
+import { IWindowInfo } from './../model'
 import { EvetnHandlerWorcer } from './../core'
 
 //  >>>>>>>>>   Defining onRemoved event

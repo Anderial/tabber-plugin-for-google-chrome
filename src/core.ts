@@ -1,4 +1,4 @@
-import { ITabInfo, IWindowInfo, MegaMegaMessage, nameof, INextMoveTargetTab } from './model';
+import { IWindowInfo, MegaMegaMessage, nameof, INextMoveTargetTab } from './model';
 
 /** 
  * Event handler

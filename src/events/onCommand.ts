@@ -60,7 +60,7 @@ function SerchNextCursor() {
                     }
 
                     storageNextMoveTargetTab.put(nextMoveTargetTab).onsuccess = () => {
-                        chrome.tabs.get(nextMoveTargetTab.nextTargetTabId,(tab:chrome.tabs.Tab)=>{
+                        chrome.tabs.get(nextMoveTargetTab.nextTargetTabId, (tab: chrome.tabs.Tab) => {
                             var tabInfo: ITabInfo = ConvertTabInfo(tab);
                             tabInfo.id = undefined;
                             tabInfo.targetWindowId = undefined;
@@ -91,28 +91,49 @@ function GetNextNextTabId(currentTabId: number, windowInfo: IWindowInfo): number
 function MoveNextTargetTab() {
     chrome.tabs.getSelected((tab: chrome.tabs.Tab) => {
         var targetWindowId = tab.windowId;
+        var targetTabId = tab.id;
         connectDB((dbContext: IDBDatabase) => {
-            var dbTransaction = dbContext.transaction([storageNameNextMoveTargetTab], "readonly");
+            var dbTransaction = dbContext.transaction([storageNameNextMoveTargetTab, storageNameWindowInfo], "readonly");
+
+            var nextTargetTabId: number;
+
+            dbTransaction.oncomplete = () => {
+                MoveNextTab(nextTargetTabId)
+            };
+
+            var storageWindowInfo = dbTransaction.objectStore(storageNameWindowInfo);
+
             var storageNextMoveTargetTab = dbTransaction.objectStore(storageNameNextMoveTargetTab);
+
             var storageNextMoveTargetTab_Request = storageNextMoveTargetTab.get(targetWindowId)
 
             storageNextMoveTargetTab_Request.onsuccess = () => {
                 var nextMoveTargetTab: INextMoveTargetTab = storageNextMoveTargetTab_Request.result;
 
-                if (nextMoveTargetTab == undefined || nextMoveTargetTab.nextTargetTabId == undefined) {
-                    return;
+                if (nextMoveTargetTab != undefined) {
+                    nextTargetTabId = nextMoveTargetTab.nextTargetTabId;
                 }
 
-                dbTransaction.oncomplete = () => {
-                    var updateProperties: chrome.tabs.UpdateProperties = {
-                        selected: true,
-                        active: true,
-                        highlighted: true
-                    }
+                if (nextTargetTabId == undefined) {
+                    var storageWindowInfo_requesr = storageWindowInfo.get(targetWindowId);
 
-                    chrome.tabs.update(nextMoveTargetTab.nextTargetTabId, updateProperties);
-                };
+                    storageWindowInfo_requesr.onsuccess = () => {
+                        var windowInfo: IWindowInfo = storageWindowInfo_requesr.result;
+
+                        nextTargetTabId = GetNextNextTabId(targetTabId, windowInfo);
+                    }
+                }
             }
         });
     });
+}
+
+function MoveNextTab(nextTargetTabId: number) {
+    var updateProperties: chrome.tabs.UpdateProperties = {
+        selected: true,
+        active: true,
+        highlighted: true
+    }
+
+    chrome.tabs.update(nextTargetTabId, updateProperties);
 }
