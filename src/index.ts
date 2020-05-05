@@ -1,4 +1,4 @@
-import { ITabInfo, IWindowInfo, MegaMegaMessage } from './model'
+import { ITabInfo, IWindowInfo, MegaMegaMessage, ConvertTabInfo } from './model'
 import { EvetnHandlerWorcer } from './core'
 
 //  Clean LocalStorage
@@ -23,20 +23,28 @@ function windowOnloadEvent(targetWindowInfo: IWindowInfo, targetTabId: number) {
     //  Add items
     for (let index = 0; index < targetWindowInfo.tabs.length; index++) {
         let tabInfo = targetWindowInfo.tabs[index];
-        createDomElement(tabInfo, parentHtmlElement);
+        chrome.tabs.get(tabInfo.id, (tab: chrome.tabs.Tab) => {
+            tabInfo = ConvertTabInfo(tab);
+            var shortSiteName = tabInfo.url.split('//')[1].split('/')[0];
+            if (shortSiteName.startsWith('www.')) {
+                shortSiteName = shortSiteName.replace(/^.{4}/, '');
+            }
+            if (shortSiteName.indexOf('.') == -1) {
+                shortSiteName = tabInfo.title;
+            }else{
+                shortSiteName = `${shortSiteName} ${tabInfo.title}`;
+            }
+            var element = `
+                <div class="list-group-item list-group-item-action rounded-0 ${index == 0 ? 'active' : ''}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="text-truncate">${shortSiteName}</h5>
+                        ${tabInfo.favIconUrl != undefined && tabInfo.favIconUrl != '' ? `<small><img src="${tabInfo.favIconUrl}" width="18" height="18" /></small>` : ''}
+                    </div>
+                    <p class="col-10 text-truncate" style="padding: 0; margin-bottom: 0;" >${tabInfo.url}</p>
+                </div>`
+            parentHtmlElement.innerHTML += element;
+        });
     }
-    return undefined;
-}
 
-/**
- * Function for drawing tab list item
- * @param {ITabInfo} tab_info 
- * @param {*} parent_element 
- */
-function createDomElement(tab_info: ITabInfo, parent_element: any) {
-    let new_item = document.createElement("li");
-    new_item.setAttribute("id", tab_info.id.toString());
-    let node = document.createTextNode("Tab id: " + tab_info.id + ", name: " + tab_info.title);
-    new_item.appendChild(node);
-    parent_element.appendChild(new_item);
+    return undefined;
 }
