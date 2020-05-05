@@ -2,5 +2,5 @@
 Plugin for quick navigation on google chrome tabs
 
 Need to implement:
--  Implement transition hotkey command
--  Implement onLoaded tab event, (need full tab info)
+-  Implement fast movement between the last two selected tabs (Ctrl+Shift+X)
+-  Implement selection display next target transition in extension window, not use alert()
