@@ -1,6 +1,26 @@
 body {
-	font-size: 11px;
-	font-family: 'Roboto', sans-serif;
-	margin: 0;
-	width: 500px;
+    font-size: 11px;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    width: 500px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
