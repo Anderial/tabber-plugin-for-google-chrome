@@ -28,11 +28,17 @@
         "persistent": false
     },
     "commands": {
-        "toggle_tab_event": {
+        "Ctrl_Shift_X": {
             "suggested_key": {
                 "default": "Ctrl+Shift+X"
             },
-            "description": "toggle_tab_event: Ctrl+Shift+X"
+            "description": "Ctrl_Shift_X"
+        },
+        "Ctrl_Shift_Z": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+Z"
+            },
+            "description": "Ctrl_Shift_Z"
         }
     }
 }

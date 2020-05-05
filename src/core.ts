@@ -1,4 +1,4 @@
-import { ITabInfo, IWindowInfo, MegaMegaMessage, nameof } from './model';
+import { ITabInfo, IWindowInfo, MegaMegaMessage, nameof, INextMoveTargetTab } from './model';
 
 /** 
  * Event handler
@@ -8,9 +8,10 @@ import { ITabInfo, IWindowInfo, MegaMegaMessage, nameof } from './model';
  */
 export function EvetnHandlerWorcer(targetWindowId: number, targetTabId: number, eventFunction: Function) {
     connectDB((dbContext: IDBDatabase) => {
-        var dbTransaction = dbContext.transaction([storeName], "readwrite");
+        var dbTransaction = dbContext.transaction([storageNameWindowInfo, storageNameNextMoveTargetTab], "readwrite");
 
-        var storageWindowInfo = dbTransaction.objectStore(storeName);
+        var storageWindowInfo = dbTransaction.objectStore(storageNameWindowInfo);
+        var storageNextMoveTargetTab = dbTransaction.objectStore(storageNameNextMoveTargetTab);
 
         var getWindowInfoRequest = storageWindowInfo.get(targetWindowId);
 
@@ -23,26 +24,33 @@ export function EvetnHandlerWorcer(targetWindowId: number, targetTabId: number, 
                     tabs: []
                 };
             }
-    
+
             var changedWindowInfo = eventFunction(windowInfo, targetTabId);
-    
+
             if (changedWindowInfo != undefined) {
-                storageWindowInfo.put(changedWindowInfo);
+                storageWindowInfo.put(changedWindowInfo).onsuccess = () => {
+                    var clean_NextMoveTargetTab: INextMoveTargetTab = {
+                        targetWindowId: targetWindowId,
+                        nextTargetTabId: undefined
+                    }
+                    storageNextMoveTargetTab.put(clean_NextMoveTargetTab);
+                };
             }
         }
     });
 }
 
-var indexedDB = window.indexedDB,
-    baseName = "TabberPluginDataBase",
-    storeName = "WindowInfoStore";
+export var indexedDB = window.indexedDB;
+export var baseName = "TabberPluginDataBase";
+export var storageNameWindowInfo = "WindowInfoStore";
+export var storageNameNextMoveTargetTab = "NextMoveTargetTabStorage";
 
 function logerr(error: any) {
     alert("Error in DB !!!!!!!! ")
     MegaMegaMessage(error);
 }
 
-function connectDB(otherFunction: Function) {
+export function connectDB(otherFunction: Function) {
     var request = indexedDB.open(baseName, 1);
 
     request.onerror = logerr;
@@ -52,11 +60,18 @@ function connectDB(otherFunction: Function) {
     }
 
     request.onupgradeneeded = function (e) {
-        var objectStoreParameters: IDBObjectStoreParameters = {
+        var objectStoreWindowInfoParameters: IDBObjectStoreParameters = {
             autoIncrement: false,
             keyPath: nameof<IWindowInfo>("id")
         };
-        request.result.createObjectStore(storeName, objectStoreParameters);
+        request.result.createObjectStore(storageNameWindowInfo, objectStoreWindowInfoParameters);
+
+        var objectStoreNextMoveTargetTabParameters: IDBObjectStoreParameters = {
+            autoIncrement: false,
+            keyPath: nameof<INextMoveTargetTab>("targetWindowId")
+        };
+        request.result.createObjectStore(storageNameNextMoveTargetTab, objectStoreNextMoveTargetTabParameters);
+
         connectDB(otherFunction);
     }
 }

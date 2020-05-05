@@ -17,6 +17,11 @@ export interface ITabInfo {
     targetWindowId: number;
 }
 
+export interface INextMoveTargetTab{
+    targetWindowId: number;
+    nextTargetTabId: number;
+}
+
 /** 
  * Converting object unknown type received by onCreated event
  * @param {chrome.tabs.Tab} chromeTabInfo Chrom type
